@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
+import kr.co.shineware.nlp.posta.constant.FILENAME;
+import kr.co.shineware.nlp.posta.constant.SYMBOL;
 import kr.co.shineware.nlp.posta.corpus.model.Dictionary;
 import kr.co.shineware.nlp.posta.corpus.model.Grammar;
 import kr.co.shineware.nlp.posta.corpus.parser.CorpusParser;
@@ -19,6 +21,8 @@ public class CorpusBuilder {
 	
 	public CorpusBuilder(){
 		this.parser = new CorpusParser();
+		this.dictionary = new Dictionary();
+		this.grammar = new Grammar();
 	}
 	
 	public void buildPath(String path){
@@ -29,10 +33,18 @@ public class CorpusBuilder {
 		if(rootPath.exists() && rootPath.isDirectory()){
 			List<String> filenames = FileUtil.getFileNames(path);
 			for (String filename : filenames) {
-				this.build(filename);
+				System.out.println(filename);
+				if(suffix != null){
+					if(filename.endsWith(suffix)){
+						this.build(filename);
+					}
+				}else{
+					this.build(filename);
+				}
+				
 			}
 		}else{
-			;
+			System.err.println("Corpus Build Path Error");
 		}
 	}
 	public void build(String filename){
@@ -45,6 +57,9 @@ public class CorpusBuilder {
 					continue;
 				}
 				List<Pair<String,String>> wordPosList = this.parser.parse(line);
+				if(wordPosList == null){
+					continue;
+				}
 				this.buildDictionary(wordPosList);
 				this.buildGrammar(wordPosList);
 			}
@@ -53,13 +68,34 @@ public class CorpusBuilder {
 			e.printStackTrace();
 		}
 	}
+	public void save(String savePathName){
+		File savePath = new File(savePathName);
+		if (savePath.exists() && !savePath.isDirectory()) {
+			System.err.println("CorpusBuilder.save error!");
+			System.err
+			.println("savePathName is exists, but it's not a directory.");
+			System.err.println("please check path name to save");
+			System.exit(1);
+		}
+		savePath.mkdirs();
+		this.dictionary.save(savePathName + File.separator + FILENAME.WORD_DIC);		
+		this.grammar.save(savePathName + File.separator + FILENAME.GRAMMAR);
+		savePath = null;
+	}
 
 	private void buildDictionary(List<Pair<String, String>> wordPosList) {
-		;
+		for (Pair<String, String> wordPos : wordPosList) {
+			this.dictionary.append(wordPos);
+		}
 	}
 
 	private void buildGrammar(List<Pair<String, String>> wordPosList) {
-		// TODO Auto-generated method stub
-		
+		String prevPos = SYMBOL.START;
+		for(int i=0;i<wordPosList.size();i++){
+			String pos = wordPosList.get(i).getSecond();
+			this.grammar.append(prevPos, pos);
+			prevPos = pos;
+		}
+		this.grammar.append(prevPos, SYMBOL.END);
 	}
 }

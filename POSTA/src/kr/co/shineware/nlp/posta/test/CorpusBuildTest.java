@@ -8,6 +8,7 @@ public class CorpusBuildTest {
 		String buildPath = "D:\\NLP\\shineware\\posta\\Converter_version1.0.1\\data";
 		CorpusBuilder corpusBuilder = new CorpusBuilder();
 		corpusBuilder.buildPath(buildPath);
+		corpusBuilder.save("corpus_build");
 	}
 
 }

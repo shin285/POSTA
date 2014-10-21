@@ -20,6 +20,9 @@ public class Grammar implements FileAccessible{
 	public Grammar() {
 		this.grammar = new HashMap<String, Map<String,Integer>>();
 	}
+	public Grammar(String filename){
+		this.load(filename);
+	}
 	
 	@Override
 	public void save(String filename) {
@@ -54,7 +57,8 @@ public class Grammar implements FileAccessible{
 
 	@Override
 	public void load(String filename) {
-		grammar = new HashMap<String, Map<String,Integer>>();
+		this.grammar = null;
+		this.grammar = new HashMap<String, Map<String,Integer>>();
 		List<String> lines = FileUtil.load2List(filename);
 		int size = lines.size();
 		for(int i=0;i<size;i++){
@@ -92,12 +96,12 @@ public class Grammar implements FileAccessible{
 			}
 			
 			//load to memory
-			grammar.put(prevPos, nextPosMap);
+			this.grammar.put(prevPos, nextPosMap);
 		}
 	}
 	
 	public void append(String prevPos,String curPos){
-		Map<String,Integer> nextPosTfMap = grammar.get(prevPos);
+		Map<String,Integer> nextPosTfMap = this.grammar.get(prevPos);
 		if(nextPosTfMap == null){
 			nextPosTfMap = new HashMap<String, Integer>();
 		}
@@ -107,7 +111,7 @@ public class Grammar implements FileAccessible{
 		}
 		tf++;
 		nextPosTfMap.put(curPos, tf);
-		grammar.put(prevPos, nextPosTfMap);
+		this.grammar.put(prevPos, nextPosTfMap);
 	}
 
 }

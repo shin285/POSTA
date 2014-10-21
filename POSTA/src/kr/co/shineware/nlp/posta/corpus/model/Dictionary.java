@@ -20,6 +20,9 @@ public class Dictionary implements FileAccessible{
 	public Dictionary() {
 		this.dic = new HashMap<String, Map<String,Integer>>();
 	}
+	public Dictionary(String filename) {
+		this.load(filename);
+	}
 	
 	@Override
 	public void save(String filename) {

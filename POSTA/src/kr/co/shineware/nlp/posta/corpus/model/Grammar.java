@@ -113,5 +113,8 @@ public class Grammar implements FileAccessible{
 		nextPosTfMap.put(curPos, tf);
 		this.grammar.put(prevPos, nextPosTfMap);
 	}
+	public Map<String, Map<String, Integer>> getGrammar(){
+		return grammar;
+	}
 
 }

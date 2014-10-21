@@ -4,6 +4,12 @@ import kr.co.shineware.nlp.posta.interfaces.FileAccessible;
 
 public class Observation implements FileAccessible{
 
+	public Observation(){
+		;
+	}
+	public Observation(String filename){
+		this.load(filename);
+	}
 	@Override
 	public void save(String filename) {
 		// TODO Auto-generated method stub
@@ -15,5 +21,6 @@ public class Observation implements FileAccessible{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

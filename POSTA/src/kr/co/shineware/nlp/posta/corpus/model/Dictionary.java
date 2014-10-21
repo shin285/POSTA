@@ -23,6 +23,9 @@ public class Dictionary implements FileAccessible{
 	public Dictionary(String filename) {
 		this.load(filename);
 	}
+	public Map<String, Map<String, Integer>> getDictionary(){
+		return dic;
+	}
 	
 	@Override
 	public void save(String filename) {

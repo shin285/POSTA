@@ -97,7 +97,7 @@ public class ModelBuilder {
 				int totalPosTf = totalPrevPOSTf.get(posTf.getKey());
 				double observationScore = (double)posTf.getValue()/totalPosTf;
 				observationScore = Math.log10(observationScore);
-//				this.observation.put(word,this.table.getId(posTf.getKey()),observationScore);
+				this.observation.put(word,this.table.getId(posTf.getKey()),observationScore);
 			}
 		}
 	}

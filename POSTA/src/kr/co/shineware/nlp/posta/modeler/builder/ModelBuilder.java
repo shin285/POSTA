@@ -21,6 +21,34 @@ public class ModelBuilder {
 	private Transition transition;
 	private Observation observation;
 	
+	public void save(String savePathName){
+		File savePath = new File(savePathName);
+		if (savePath.exists() && !savePath.isDirectory()) {
+			System.err.println("CorpusBuilder.save error!");
+			System.err
+			.println("savePathName is exists, but it's not a directory.");
+			System.err.println("please check path name to save");
+			System.exit(1);
+		}
+		savePath.mkdirs();
+		this.table.save(savePathName + File.separator + FILENAME.POS_TABLE);
+		this.observation.save(savePathName + File.separator + FILENAME.OBSERVATION);		
+		this.transition.save(savePathName + File.separator + FILENAME.TRANSITION);
+		savePath = null;
+	}
+	public void load(String savePath){
+		this.table = null;
+		this.table = new PosTable();
+		this.table.load(savePath + File.separator + FILENAME.POS_TABLE);
+		
+		this.observation = null;
+		this.observation = new Observation(savePath + File.separator + FILENAME.OBSERVATION);
+		
+		this.transition = null;
+		this.transition = new Transition();
+		this.transition.load(savePath + File.separator + FILENAME.TRANSITION);
+	}
+	
 	public void buildPath(String path){
 		this.wordDic = null;
 		this.grammar = null;

@@ -12,20 +12,22 @@ public class Observation implements FileAccessible{
 	private AhoCorasickDictionary<List<Pair<Integer,Double>>> observation;
 	
 	public Observation(){
-		;
+		observation = new AhoCorasickDictionary<>();
 	}
 	public Observation(String filename){
 		this.load(filename);
 	}
 	@Override
 	public void save(String filename) {
+		observation.buildFailLink();
 		observation.save(filename);
 	}
 
 	@Override
 	public void load(String filename) {
-		observation = null;
-		observation.load(filename);
+		this.observation = null;
+		this.observation = new AhoCorasickDictionary<>();
+		this.observation.load(filename);
 	}
 	public void put(String word, int id, double observationScore) {
 		List<Pair<Integer,Double>> posIdScorePairList = observation.getValue(word);

@@ -11,7 +11,7 @@ public class ModelBuildTest {
 //		builder.buildPath("corpus_build");
 //		builder.save("model_build");
 		
-		builder.load("model_build_light");
+		builder.load("model_build");
 		System.out.println("load done");
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNext()){

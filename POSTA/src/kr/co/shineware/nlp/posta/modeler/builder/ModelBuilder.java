@@ -22,7 +22,7 @@ public class ModelBuilder {
 	private PosTable table;
 	private Transition transition;
 	private Observation observation;
-	
+
 	public void save(String savePathName){
 		File savePath = new File(savePathName);
 		if (savePath.exists() && !savePath.isDirectory()) {
@@ -42,25 +42,29 @@ public class ModelBuilder {
 		this.table = null;
 		this.table = new PosTable();
 		this.table.load(savePath + File.separator + FILENAME.POS_TABLE);
-		
+
 		this.observation = null;
 		this.observation = new Observation(savePath + File.separator + FILENAME.OBSERVATION);
-		
+
 		this.transition = null;
 		this.transition = new Transition();
 		this.transition.load(savePath + File.separator + FILENAME.TRANSITION);
 	}
-		
+
 	public void printSearchResult(String key){
-		Map<String, List<Pair<Integer, Double>>> resultMap = this.observation.get(key);
-		Set<Entry<String, List<Pair<Integer, Double>>>> entrySet = resultMap.entrySet();
-		for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
-			System.out.println();
+		Map<String, List<Pair<Integer, Double>>> resultMap = this.observation.get(key+" ");
+		if(resultMap == null){
+			System.out.println(resultMap);
+		}else{
+			Set<Entry<String, List<Pair<Integer, Double>>>> entrySet = resultMap.entrySet();
+			for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {
+				System.out.println(entry.getKey());
+				System.out.println(entry.getValue());
+				System.out.println();
+			}
 		}
 	}
-	
+
 	public void buildPath(String path){
 		this.wordDic = null;
 		this.grammar = null;
@@ -77,7 +81,7 @@ public class ModelBuilder {
 		//build observation
 		this.calObservation(totalPrevPOSTf);		
 	}
-	
+
 	private Map<String, Integer> getTotalPrevPOSCount() {
 
 		Map<String,Integer> posCountMap = new HashMap<String, Integer>();
@@ -106,7 +110,7 @@ public class ModelBuilder {
 		}
 		this.table.put(SYMBOL.END);
 	}
-	
+
 	private void calTransition(Map<String, Integer> totalPrevPOSTf) {
 
 		this.transition  = new Transition(this.table.size());
@@ -124,7 +128,7 @@ public class ModelBuilder {
 			}
 		}
 	}
-	
+
 	private void calObservation(Map<String, Integer> totalPrevPOSTf) {
 
 		this.observation = new Observation();
@@ -137,7 +141,7 @@ public class ModelBuilder {
 				int totalPosTf = totalPrevPOSTf.get(posTf.getKey());
 				double observationScore = (double)posTf.getValue()/totalPosTf;
 				observationScore = Math.log10(observationScore);
-				this.observation.put(word,this.table.getId(posTf.getKey()),observationScore);
+				this.observation.put(word+" ",this.table.getId(posTf.getKey()),observationScore);
 			}
 		}
 	}

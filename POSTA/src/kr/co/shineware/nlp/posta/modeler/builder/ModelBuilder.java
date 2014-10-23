@@ -2,6 +2,7 @@ package kr.co.shineware.nlp.posta.modeler.builder;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,6 +14,7 @@ import kr.co.shineware.nlp.posta.corpus.model.Grammar;
 import kr.co.shineware.nlp.posta.modeler.model.Observation;
 import kr.co.shineware.nlp.posta.modeler.model.PosTable;
 import kr.co.shineware.nlp.posta.modeler.model.Transition;
+import kr.co.shineware.util.common.model.Pair;
 
 public class ModelBuilder {
 	private Dictionary wordDic;
@@ -47,6 +49,16 @@ public class ModelBuilder {
 		this.transition = null;
 		this.transition = new Transition();
 		this.transition.load(savePath + File.separator + FILENAME.TRANSITION);
+	}
+		
+	public void printSearchResult(String key){
+		Map<String, List<Pair<Integer, Double>>> resultMap = this.observation.get(key);
+		Set<Entry<String, List<Pair<Integer, Double>>>> entrySet = resultMap.entrySet();
+		for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {
+			System.out.println(entry.getKey());
+			System.out.println(entry.getValue());
+			System.out.println();
+		}
 	}
 	
 	public void buildPath(String path){

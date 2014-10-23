@@ -11,7 +11,7 @@ public class ModelBuildTest {
 //		builder.buildPath("corpus_build");
 //		builder.save("model_build");
 		
-		builder.load("model_build");
+		builder.load("model_build_light");
 		System.out.println("load done");
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNext()){
@@ -19,6 +19,7 @@ public class ModelBuildTest {
 			if(in.equals("exit")){
 				break;
 			}
+			builder.printSearchResult(in.trim());
 		}
 		scanner.close();
 	}

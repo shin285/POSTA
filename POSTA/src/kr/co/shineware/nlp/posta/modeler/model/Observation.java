@@ -2,6 +2,7 @@ package kr.co.shineware.nlp.posta.modeler.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import kr.co.shineware.ds.aho_corasick.AhoCorasickDictionary;
 import kr.co.shineware.nlp.posta.interfaces.FileAccessible;
@@ -47,6 +48,13 @@ public class Observation implements FileAccessible{
 		}
 		this.observation.put(word, posIdScorePairList);
 	}
-
-
+	public Map<String, List<Pair<Integer, Double>>> get(char key){
+		return observation.get(key);
+	}
+	public Map<String, List<Pair<Integer, Double>>> get(String key){
+		return observation.get(key);
+	}
+	public Map<String, List<Pair<Integer, Double>>> get(char[] keys){
+		return observation.get(keys);
+	}
 }

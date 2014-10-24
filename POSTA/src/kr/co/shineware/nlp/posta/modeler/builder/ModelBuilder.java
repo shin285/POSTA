@@ -38,6 +38,9 @@ public class ModelBuilder {
 		this.transition.save(savePathName + File.separator + FILENAME.TRANSITION);
 		savePath = null;
 	}
+	public void buildObservation(){
+		this.observation.buildFailLink();
+	}
 	public void load(String savePath){
 		this.table = null;
 		this.table = new PosTable();

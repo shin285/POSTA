@@ -20,8 +20,10 @@ public class Observation implements FileAccessible{
 	}
 	@Override
 	public void save(String filename) {
-		observation.buildFailLink();
 		observation.save(filename);
+	}
+	public void buildFailLink(){
+		observation.buildFailLink();
 	}
 
 	@Override

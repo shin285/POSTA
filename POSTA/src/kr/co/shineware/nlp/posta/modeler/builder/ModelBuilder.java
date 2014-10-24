@@ -55,7 +55,7 @@ public class ModelBuilder {
 	}
 
 	public void printSearchResult(String key){
-		Map<String, List<Pair<Integer, Double>>> resultMap = this.observation.get(key+" ");
+		Map<String, List<Pair<Integer, Double>>> resultMap = this.observation.get(" "+key+" ");
 		if(resultMap == null){
 			System.out.println(resultMap);
 		}else{
@@ -144,7 +144,7 @@ public class ModelBuilder {
 				int totalPosTf = totalPrevPOSTf.get(posTf.getKey());
 				double observationScore = (double)posTf.getValue()/totalPosTf;
 				observationScore = Math.log10(observationScore);
-				this.observation.put(word+" ",this.table.getId(posTf.getKey()),observationScore);
+				this.observation.put(" "+word+" ",this.table.getId(posTf.getKey()),observationScore);
 			}
 		}
 	}

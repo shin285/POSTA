@@ -19,6 +19,8 @@ public class EnPosta {
 	public EnPosta(String modelPath) {
 		this.init();
 		this.load(modelPath);
+		this.observation.put(" This is ", 29, 0.0);
+		this.observation.buildFailLink();
 	}
 	private void init() {
 		this.observation = null;
@@ -39,7 +41,10 @@ public class EnPosta {
 		String[] words = in.split(" ");
 		for(int i=0;i<words.length;i++){
 			String word = words[i].trim();
-			System.out.println(word);
+			if(i == 0){
+				word = " " +word;
+			}
+			System.out.println("Word : "+word);
 			Map<String,List<Pair<Integer,Double>>> result = observation.get(word+" ");
 			this.printResult(result,i);
 		}
@@ -49,8 +54,9 @@ public class EnPosta {
 		for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {
 			List<Pair<Integer, Double>> posIdScoreList = entry.getValue();
 			String word = entry.getKey();
+			int rewindIdx = word.trim().split(" ").length-1;
 			for (Pair<Integer, Double> pair : posIdScoreList) {
-				System.out.println("["+(i-word.length())+","+i+"] : "+word+"/"+this.posTable.getPos(pair.getFirst()));
+				System.out.println("["+(i-rewindIdx)+","+i+"] : "+word.trim()+"/"+this.posTable.getPos(pair.getFirst()));
 			}
 		}
 	}

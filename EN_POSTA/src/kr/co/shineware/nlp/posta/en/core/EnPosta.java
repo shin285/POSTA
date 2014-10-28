@@ -57,19 +57,25 @@ public class EnPosta extends Posta{
 	
 	public void analyze(String in){
 		lattice = null;
-		lattice = new Lattice();
+		lattice = new Lattice(this.posTable);
 		lattice.setTransition(this.transition);
 		String[] words = in.replaceAll("[ ]+", " ").split(" ");
 		for(int i=0;i<words.length;i++){
 			String word = words[i].trim();
+			if(i == 0){
+				word = " "+word;
+			}
 			Map<String,List<Pair<Integer,Double>>> result = this.observation.get(word+" ");
 			if(result == null){
 				continue;
 			}
 			this.insertLattice(result,i);
-			this.printResult(result,i);
+//			this.printResult(result,i);
 		}
+		this.lattice.printMax(words.length);
+		this.lattice.print(words.length);
 	}
+	
 	private void insertLattice(Map<String, List<Pair<Integer, Double>>> result, int i) {
 		Set<Entry<String,List<Pair<Integer,Double>>>> entrySet = result.entrySet();
 		for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {

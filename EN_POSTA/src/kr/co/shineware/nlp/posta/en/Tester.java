@@ -14,6 +14,6 @@ public class Tester {
 		posta.load("model_build");
 		posta.appendUserDic("dic.user");
 		posta.buildFailLink();
-		posta.analyze("New York City! GOOD!     City! GOOD! City! GOOD!");
+		posta.analyze("This is war");
 	}
 }

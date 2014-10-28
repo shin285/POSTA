@@ -14,6 +14,7 @@ import kr.co.shineware.nlp.posta.corpus.model.Grammar;
 import kr.co.shineware.nlp.posta.modeler.model.Observation;
 import kr.co.shineware.nlp.posta.modeler.model.PosTable;
 import kr.co.shineware.nlp.posta.modeler.model.Transition;
+import kr.co.shineware.nlp.posta.modeler.parser.LanguageParser;
 import kr.co.shineware.util.common.model.Pair;
 
 public class ModelBuilder {
@@ -22,6 +23,7 @@ public class ModelBuilder {
 	private PosTable table;
 	private Transition transition;
 	private Observation observation;
+	private LanguageParser parser;
 
 	public void save(String savePathName){
 		File savePath = new File(savePathName);
@@ -144,8 +146,14 @@ public class ModelBuilder {
 				int totalPosTf = totalPrevPOSTf.get(posTf.getKey());
 				double observationScore = (double)posTf.getValue()/totalPosTf;
 				observationScore = Math.log10(observationScore);
-				this.observation.put(" "+word+" ",this.table.getId(posTf.getKey()),observationScore);
+				this.observation.put(parser.parsing(word),this.table.getId(posTf.getKey()),observationScore);
 			}
 		}
+	}
+	public LanguageParser getLanguageParser() {
+		return parser;
+	}
+	public void setLanguageParser(LanguageParser parser) {
+		this.parser = parser;
 	}
 }

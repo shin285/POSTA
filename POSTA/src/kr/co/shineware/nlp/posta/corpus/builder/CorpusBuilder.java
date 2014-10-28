@@ -98,4 +98,8 @@ public class CorpusBuilder {
 		}
 		this.grammar.append(prevPos, SYMBOL.END);
 	}
+
+	public void setCorpusParser(CorpusParser corpusParser) {
+		this.parser = corpusParser;		
+	}
 }

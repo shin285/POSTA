@@ -1,6 +1,9 @@
 package kr.co.shineware.nlp.posta.en;
 
+import java.util.List;
+
 import kr.co.shineware.nlp.posta.en.core.EnPosta;
+import kr.co.shineware.util.common.file.FileUtil;
 
 public class Tester {
 
@@ -14,6 +17,11 @@ public class Tester {
 		posta.load("model_build");
 		posta.appendUserDic("dic.user");
 		posta.buildFailLink();
-		posta.analyze("This is war");
+		List<String> lines = FileUtil.load2List("test.in");
+		for (String line : lines) {
+			if(line.trim().length() == 0)continue;
+			posta.analyze(line);
+		}
+//		posta.analyze("THIS IS WONDERFUL!");
 	}
 }

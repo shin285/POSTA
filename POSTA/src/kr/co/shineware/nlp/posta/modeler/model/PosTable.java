@@ -25,6 +25,15 @@ public class PosTable implements FileAccessible{
 	public PosTable(){
 		this.init();
 	}
+	
+	public Map<String, Integer> getPosIdTable(){
+		return this.posIdTable;
+	}
+	
+	public Map<Integer, String> getIdPosTable(){
+		return this.idPosTable;
+	}
+	
 
 	private void init() {
 		this.posIdTable = null;

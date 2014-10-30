@@ -1,6 +1,7 @@
 package kr.co.shineware.nlp.posta.en.core.lattice;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import kr.co.shineware.nlp.posta.constant.SYMBOL;
 import kr.co.shineware.nlp.posta.en.core.lattice.model.LatticeNode;
 import kr.co.shineware.nlp.posta.modeler.model.PosTable;
 import kr.co.shineware.nlp.posta.modeler.model.Transition;
+import kr.co.shineware.util.common.model.Pair;
 
 public class Lattice {
 	//key = endIdx
@@ -19,7 +21,7 @@ public class Lattice {
 	private Map<Integer,Map<Integer,LatticeNode>> lattice;
 	private Transition transition = null;
 	private PosTable table;
-	
+
 	public Lattice(PosTable table){
 		this.table = table;
 		this.init();
@@ -43,13 +45,15 @@ public class Lattice {
 
 	public void put(int beginIdx,int endIdx,String morph,int posId,double score){
 		LatticeNode prevMaxNode = this.getPrevMaxNode(beginIdx,posId);
-		LatticeNode curNode = new LatticeNode();
-		curNode.setMorph(morph);
-		curNode.setPosId(posId);
-		curNode.setPrevHashcode(prevMaxNode.hashCode());
-		curNode.setPrevIdx(beginIdx);
-		curNode.setScore(prevMaxNode.getScore()+this.transition.get(prevMaxNode.getPosId(), posId)+score);
-		this.insertLattice(endIdx,curNode);
+		if(prevMaxNode != null){
+			LatticeNode curNode = new LatticeNode();
+			curNode.setMorph(morph);
+			curNode.setPosId(posId);
+			curNode.setPrevHashcode(prevMaxNode.hashCode());
+			curNode.setPrevIdx(beginIdx);
+			curNode.setScore(prevMaxNode.getScore()+this.transition.get(prevMaxNode.getPosId(), posId)+score);
+			this.insertLattice(endIdx,curNode);
+		}
 	}
 
 	private void insertLattice(int endIdx, LatticeNode curNode) {
@@ -57,7 +61,7 @@ public class Lattice {
 		if(latticeNodeMap == null){
 			latticeNodeMap = new HashMap<>();
 		}
-		
+
 		latticeNodeMap.put(curNode.hashCode(), curNode);
 		this.lattice.put(endIdx, latticeNodeMap);
 	}
@@ -96,17 +100,45 @@ public class Lattice {
 		}
 	}
 	public void printMax(int length) {
+		List<String> resultList = this.getMax(length);
+		for (String result : resultList) {
+			System.out.println(result);
+		}
+	}
+
+	public List<String> getMax(int length) {
 		LatticeNode lastNode = this.getPrevMaxNode(length, table.getId(SYMBOL.END));
+		if(lastNode == null){
+			Map<Integer,LatticeNode> newLastNodeMap = new HashMap<Integer, LatticeNode>(); 
+			Map<Integer,LatticeNode> lastNodeMap = this.lattice.get(length);
+			Set<Integer> nodeHashcodeSet = lastNodeMap.keySet();
+			for (Integer nodeHashcode : nodeHashcodeSet) {
+				LatticeNode lastNodeCandidate = lastNodeMap.get(nodeHashcode);
+				Set<Integer> posIdSet = this.table.getIdPosTable().keySet();
+				for (Integer posId : posIdSet) {
+					LatticeNode newLastNode = new LatticeNode();
+					newLastNode.setMorph(lastNodeCandidate.getMorph());
+					newLastNode.setPosId(posId);
+					newLastNode.setPrevHashcode(lastNodeCandidate.getPrevHashcode());
+					newLastNode.setPrevIdx(lastNodeCandidate.getPrevIdx());
+					newLastNode.setScore(lastNodeCandidate.getScore());
+					newLastNodeMap.put(newLastNode.hashCode(), newLastNode);
+				}				
+			}
+			this.lattice.put(length, newLastNodeMap);
+			lastNode = this.getPrevMaxNode(length, table.getId(SYMBOL.END));
+		}
+		
 		List<String> result = new ArrayList<>();
 		while(true){
-			System.out.println(lastNode);
-			if(lastNode.getPosId() == 0)break;
+			if(lastNode.getPosId() == this.table.getId(SYMBOL.START))break;
 			String token = lastNode.getMorph()+"/"+table.getPos(lastNode.getPosId());
 			result.add(token);
 			lastNode = this.lattice.get(lastNode.getPrevIdx()).get(lastNode.getPrevHashcode());
 		}
-		for(int i=result.size()-1;i>=0;i--){
-			System.out.println(result.get(i));
-		}
+		
+		Collections.reverse(result);
+		return result;
 	}
+	
 }

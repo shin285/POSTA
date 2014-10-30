@@ -3,6 +3,8 @@ package kr.co.shineware.nlp.posta.en.core;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -67,15 +69,24 @@ public class EnPosta extends Posta{
 			}
 			Map<String,List<Pair<Integer,Double>>> result = this.observation.get(word+" ");
 			if(result == null){
-				continue;
+				result = this.makeOOVResult(word+" ");
 			}
 			this.insertLattice(result,i);
-//			this.printResult(result,i);
 		}
 		this.lattice.printMax(words.length);
-		this.lattice.print(words.length);
+//		this.lattice.getMax(words.length);
 	}
 	
+	private Map<String, List<Pair<Integer, Double>>> makeOOVResult(String word) {
+		Map<String, List<Pair<Integer, Double>>> result = new HashMap<String, List<Pair<Integer,Double>>>();
+		List<Pair<Integer, Double>> posIdScoreList = new ArrayList<Pair<Integer,Double>>();
+		Set<Integer> posIdSet = this.posTable.getIdPosTable().keySet();
+		for (Integer posId : posIdSet) {
+			posIdScoreList.add(new Pair<Integer, Double>(posId, -1.0));
+		}
+		result.put(word, posIdScoreList);
+		return result;
+	}
 	private void insertLattice(Map<String, List<Pair<Integer, Double>>> result, int i) {
 		Set<Entry<String,List<Pair<Integer,Double>>>> entrySet = result.entrySet();
 		for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {

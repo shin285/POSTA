@@ -43,7 +43,7 @@ public class Lattice {
 		initNode = null;
 	}
 
-	public void put(int beginIdx,int endIdx,String morph,int posId,double score){
+	public boolean put(int beginIdx,int endIdx,String morph,int posId,double score){
 		LatticeNode prevMaxNode = this.getPrevMaxNode(beginIdx,posId);
 		if(prevMaxNode != null){
 			LatticeNode curNode = new LatticeNode();
@@ -53,7 +53,9 @@ public class Lattice {
 			curNode.setPrevIdx(beginIdx);
 			curNode.setScore(prevMaxNode.getScore()+this.transition.get(prevMaxNode.getPosId(), posId)+score);
 			this.insertLattice(endIdx,curNode);
+			return true;
 		}
+		return false;
 	}
 
 	private void insertLattice(int endIdx, LatticeNode curNode) {
@@ -68,6 +70,9 @@ public class Lattice {
 
 	private LatticeNode getPrevMaxNode(int beginIdx, int posId) {
 		Map<Integer,LatticeNode> prevNodes = this.lattice.get(beginIdx);
+		if(prevNodes == null){
+			return null;
+		}
 		Set<Entry<Integer,LatticeNode>> prevNodeSet = prevNodes.entrySet();
 		double maxScore = Double.NEGATIVE_INFINITY;
 		LatticeNode maxNode = null;
@@ -89,15 +94,27 @@ public class Lattice {
 	public void setTransition(Transition transition) {
 		this.transition = transition;
 	}
-	public void print(int maxIdx) {
-		for(int i=0;i<maxIdx;i++){
-			Map<Integer,LatticeNode> nodeMap = this.lattice.get(i);
+	//	public void print(int maxIdx) {
+	//		for(int i=0;i<maxIdx;i++){
+	//			Map<Integer,LatticeNode> nodeMap = this.lattice.get(i);
+	//			Set<Entry<Integer,LatticeNode>> entrySet = nodeMap.entrySet();
+	//			for (Entry<Integer, LatticeNode> entry : entrySet) {
+	//				System.out.println("["+entry.getValue().getPrevIdx()+","+i+"]"+entry.getValue());
+	//			}
+	//			System.out.println();
+	//		}
+	//	}
+	public void print(int idx){
+		Map<Integer,LatticeNode> nodeMap = this.lattice.get(idx);
+		if(nodeMap == null){
+			System.out.println("[?,"+idx+"]"+null);
+		}else{
 			Set<Entry<Integer,LatticeNode>> entrySet = nodeMap.entrySet();
 			for (Entry<Integer, LatticeNode> entry : entrySet) {
-				System.out.println("["+entry.getValue().getPrevIdx()+","+i+"]"+entry.getValue());
+				System.out.println("["+entry.getValue().getPrevIdx()+","+idx+"]"+entry.getValue());
 			}
-			System.out.println();
 		}
+		System.out.println();
 	}
 	public void printMax(int length) {
 		List<String> resultList = this.getMax(length);
@@ -128,7 +145,7 @@ public class Lattice {
 			this.lattice.put(length, newLastNodeMap);
 			lastNode = this.getPrevMaxNode(length, table.getId(SYMBOL.END));
 		}
-		
+
 		List<String> result = new ArrayList<>();
 		while(true){
 			if(lastNode.getPosId() == this.table.getId(SYMBOL.START))break;
@@ -136,9 +153,9 @@ public class Lattice {
 			result.add(token);
 			lastNode = this.lattice.get(lastNode.getPrevIdx()).get(lastNode.getPrevHashcode());
 		}
-		
+
 		Collections.reverse(result);
 		return result;
 	}
-	
+
 }

@@ -26,6 +26,7 @@ public class EnPosta extends Posta{
 	private PosTable posTable;
 	private EnLanguageParser languageParser;
 	private Lattice lattice;
+	public int totalTokens = 0;
 	public EnPosta(){
 		super();
 	}
@@ -57,7 +58,7 @@ public class EnPosta extends Posta{
 		this.observation.buildFailLink();
 	}
 	
-	public void analyze(String in){
+	public List<String> analyze(String in){
 		lattice = null;
 		lattice = new Lattice(this.posTable);
 		lattice.setTransition(this.transition);
@@ -71,10 +72,17 @@ public class EnPosta extends Posta{
 			if(result == null){
 				result = this.makeOOVResult(word+" ");
 			}
-			this.insertLattice(result,i);
+//			System.out.println(result);
+			boolean isInserted = this.insertLattice(result,i);
+			if(!isInserted){
+				result = this.makeOOVResult(word+" ");
+				this.insertLattice(result,i);
+			}
+//			this.lattice.print(i);
 		}
+		totalTokens += words.length;
 		this.lattice.printMax(words.length);
-//		this.lattice.getMax(words.length);
+		return this.lattice.getMax(words.length);
 	}
 	
 	private Map<String, List<Pair<Integer, Double>>> makeOOVResult(String word) {
@@ -87,8 +95,9 @@ public class EnPosta extends Posta{
 		result.put(word, posIdScoreList);
 		return result;
 	}
-	private void insertLattice(Map<String, List<Pair<Integer, Double>>> result, int i) {
+	private boolean insertLattice(Map<String, List<Pair<Integer, Double>>> result, int i) {
 		Set<Entry<String,List<Pair<Integer,Double>>>> entrySet = result.entrySet();
+		boolean inserted = false;
 		for (Entry<String, List<Pair<Integer, Double>>> entry : entrySet) {
 			List<Pair<Integer, Double>> posIdScoreList = entry.getValue();
 			String word = this.languageParser.unparsing(entry.getKey());
@@ -96,9 +105,13 @@ public class EnPosta extends Posta{
 			int beginIdx = i-rewindIdx;
 			int endIdx = i+1;
 			for (Pair<Integer, Double> pair : posIdScoreList) {
-				this.lattice.put(beginIdx,endIdx,word,pair.getFirst(),pair.getSecond());
+				boolean isInsert = this.lattice.put(beginIdx,endIdx,word,pair.getFirst(),pair.getSecond());
+				if(isInsert){
+					inserted = true;
+				}
 			}
 		}
+		return inserted;
 	}
 	private void printResult(Map<String, List<Pair<Integer, Double>>> result, int i) {
 		Set<Entry<String,List<Pair<Integer,Double>>>> entrySet = result.entrySet();

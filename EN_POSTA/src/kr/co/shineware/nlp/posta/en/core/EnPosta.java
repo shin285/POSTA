@@ -64,15 +64,16 @@ public class EnPosta extends Posta{
 		lattice = null;
 		lattice = new Lattice(this.posTable);
 		lattice.setTransition(this.transition);
-		String[] words = in.replaceAll("[ ]+", " ").split(" ");
+		String[] words = in.trim().replaceAll("[ ]+", " ").split(" ");
 		int latticeIdx = 0;
 		for(int i=0;i<words.length;i++){
 			String word = words[i].trim();
 			if(i == 0){
 				word = " "+word;
 			}
+			System.out.println(word);
 			Map<String,List<Pair<Integer,Double>>> result = this.observation.get(word+" ");
-			if(result == null){
+			if(result == null){				
 				String[] splitedWords = this.splitPunctuataion(word+" ");
 				if(splitedWords != null){
 					for (String splitedWord : splitedWords) {
@@ -86,6 +87,7 @@ public class EnPosta extends Posta{
 							this.insertLattice(result,latticeIdx);
 						}
 						latticeIdx++;
+						this.lattice.print(latticeIdx);
 					}
 					continue;
 				}
@@ -99,8 +101,9 @@ public class EnPosta extends Posta{
 				result = this.makeOOVResult(word+" ");
 				this.insertLattice(result,latticeIdx);
 			}
-			latticeIdx++;
-			//			this.lattice.print(i);
+//			this.lattice.print(latticeIdx);
+			latticeIdx++;			
+			this.lattice.print(latticeIdx);
 		}
 		totalTokens += latticeIdx;
 //		this.lattice.printMax(latticeIdx);
@@ -109,7 +112,7 @@ public class EnPosta extends Posta{
 
 	private String[] splitPunctuataion(String word) {
 		String splitedTokens = word.replaceAll("('ve|'d|'ll|'m|'s|'re)", " $1").replaceAll("([^0-9a-zA-Z-('ve|'d|'ll|'m|'s|'re)])", " $1 ").replaceAll("[ ]+", " ").trim();
-		if(splitedTokens.length() != 0){
+		if(!word.replaceAll("[ ]+", " ").trim().equals(splitedTokens)){
 			splitedTokens = splitedTokens.replaceAll(" \\. ", "\\.");
 			return splitedTokens.split(" ");
 		}

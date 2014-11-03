@@ -79,15 +79,15 @@ public class EnPosta extends Posta{
 					for (String splitedWord : splitedWords) {
 						result = this.observation.get(splitedWord+" ");
 						if(result == null){
-							result = this.makeOOVResult(word+" ");
+							result = this.makeOOVResult(splitedWord+" ");
 						}
 						boolean isInserted = this.insertLattice(result,latticeIdx);
 						if(!isInserted){
-							result = this.makeOOVResult(word+" ");
+							result = this.makeOOVResult(splitedWord+" ");
 							this.insertLattice(result,latticeIdx);
 						}
 						latticeIdx++;
-						this.lattice.print(latticeIdx);
+//						this.lattice.print(latticeIdx);
 					}
 					continue;
 				}
@@ -103,7 +103,7 @@ public class EnPosta extends Posta{
 			}
 //			this.lattice.print(latticeIdx);
 			latticeIdx++;			
-			this.lattice.print(latticeIdx);
+//			this.lattice.print(latticeIdx);
 		}
 		totalTokens += latticeIdx;
 //		this.lattice.printMax(latticeIdx);

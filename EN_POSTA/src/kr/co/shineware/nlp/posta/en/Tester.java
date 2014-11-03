@@ -17,11 +17,8 @@ public class Tester {
 		posta.load("model_build");
 		posta.appendUserDic("dic.user");
 		posta.buildFailLink();
-//		List<String> lines = FileUtil.load2List("text8");
-//		BufferedReader br = new BufferedReader(new FileReader("2014_04_21.pre"));
 		BufferedReader br = new BufferedReader(new FileReader("test.in"));
 		long begin,end,elapsed=0;
-//		for (String line : lines) {
 		String line = null;
 		while((line = br.readLine()) != null){
 			if(line.trim().length() == 0)continue;
@@ -33,6 +30,5 @@ public class Tester {
 		System.out.println(elapsed/1000.0+" sec");
 		System.out.println(posta.totalTokens/1000.0+"k tokens");
 		br.close();
-//		posta.analyze("THIS IS WONDERFUL!");
 	}
 }

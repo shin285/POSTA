@@ -12,7 +12,6 @@ import kr.co.shineware.nlp.posta.constant.SYMBOL;
 import kr.co.shineware.nlp.posta.en.core.lattice.model.LatticeNode;
 import kr.co.shineware.nlp.posta.modeler.model.PosTable;
 import kr.co.shineware.nlp.posta.modeler.model.Transition;
-import kr.co.shineware.util.common.model.Pair;
 
 public class Lattice {
 	//key = endIdx

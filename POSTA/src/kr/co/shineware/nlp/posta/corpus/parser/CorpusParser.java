@@ -12,11 +12,15 @@ public class CorpusParser {
 	public List<Pair<String, String>> parse(String in){
 		List<Pair<String,String>> wordPosList = new ArrayList<Pair<String,String>>();
 		try{		
+			in = in.replaceAll("[ ]+", " ");
 			String[] tokens = in.split(TOKEN_SEPERATOR);
 			for (String token : tokens) {
 				int posIdx = token.lastIndexOf(POS_SEPERATOR);
 				String word = token.substring(0, posIdx);
 				String pos = token.substring(posIdx+1);
+				if(word.trim().length() == 0){
+					return null;
+				}
 				wordPosList.add(new Pair<String, String>(word,pos));
 			}
 			return wordPosList;

@@ -30,6 +30,7 @@ public class EnPosta extends Posta{
 	public int totalTokens = 0;
 	public EnPosta(){
 		super();
+		this.init();
 	}
 	public EnPosta(String modelPath) {
 		super();
@@ -102,7 +103,7 @@ public class EnPosta extends Posta{
 			//			this.lattice.print(i);
 		}
 		totalTokens += latticeIdx;
-		this.lattice.printMax(words.length);
+//		this.lattice.printMax(latticeIdx);
 		return this.lattice.getMax(latticeIdx);
 	}
 

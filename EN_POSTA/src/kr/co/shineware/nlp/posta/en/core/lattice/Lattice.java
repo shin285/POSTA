@@ -117,9 +117,12 @@ public class Lattice {
 	}
 	public void printMax(int length) {
 		List<String> resultList = this.getMax(length);
+		StringBuffer sb = new StringBuffer();
 		for (String result : resultList) {
-			System.out.println(result);
+			sb.append(result);
+			sb.append(" ");
 		}
+		System.out.println(sb.toString().trim());
 	}
 
 	public List<String> getMax(int length) {

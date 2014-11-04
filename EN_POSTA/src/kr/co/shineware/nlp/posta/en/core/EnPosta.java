@@ -71,7 +71,6 @@ public class EnPosta extends Posta{
 			if(i == 0){
 				word = " "+word;
 			}
-			System.out.println(word);
 			Map<String,List<Pair<Integer,Double>>> result = this.observation.get(word+" ");
 			if(result == null){				
 				String[] splitedWords = this.splitPunctuataion(word+" ");
@@ -166,7 +165,10 @@ public class EnPosta extends Posta{
 				if(line.length() == 0 || line.charAt(0) == '#')continue;
 				String[] tmp = line.split("\t");
 				String word = tmp[0];
-				String pos = tmp[1];
+				String pos = "NNP";
+				if(tmp.length != 1){
+					pos = tmp[1];
+				}				
 				this.observation.put(this.languageParser.parsing(word), this.posTable.getId(pos), 0.0);
 			}
 			br.close();

@@ -16,6 +16,7 @@ public class Tester {
 		
 		posta.load("model_build");
 		posta.appendUserDic("dic.user");
+		posta.appendUserDic("result.txt");
 		posta.buildFailLink();
 		BufferedReader br = new BufferedReader(new FileReader("test.in"));
 		long begin,end,elapsed=0;

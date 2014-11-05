@@ -9,13 +9,9 @@ public class UnitTester {
 
 	public static void main(String[] args) {
 		EnPosta posta = new EnPosta();
-		
-		System.out.println("load model");
-		posta.load("model_build");		
-		System.out.println("load user dic");
-		posta.appendUserDic("dic.user");		
-		posta.appendUserDic("result.txt");
-		System.out.println("build fail link");
+
+		posta.load("model_build");
+		posta.appendUserDic("dic.user");
 		posta.buildFailLink();
 		
 		Scanner sc = new Scanner(System.in);

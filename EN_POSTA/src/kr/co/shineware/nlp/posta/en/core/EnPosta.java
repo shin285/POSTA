@@ -168,7 +168,7 @@ public class EnPosta extends Posta{
 				String pos = "NNP";
 				if(tmp.length != 1){
 					pos = tmp[1];
-				}				
+				}
 				this.observation.put(this.languageParser.parsing(word), this.posTable.getId(pos), 0.0);
 			}
 			br.close();

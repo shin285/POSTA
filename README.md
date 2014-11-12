@@ -1,4 +1,4 @@
 POSTA
 =====
 
-POSTA means POS TAgger.
+<b>POS TA</b>gger
